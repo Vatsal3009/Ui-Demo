@@ -2,6 +2,7 @@
     <string name="app_name">UI Demo</string>
     <string name="txt_discover">Discover</string>
     <string name="txt_discover_new_location_today">Trending location today</string>
+
     <string name="txt_feeling_adventurous">Feeling Adventurous?</string>
     <string name="txt_get_inspiration_from_these_trending_categories">Get Inspiration from these trending\ncategories</string>
 </resources>
