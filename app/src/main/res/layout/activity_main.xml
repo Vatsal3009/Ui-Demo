@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/bg_black"
+    tools:context=".ui.MainActivity">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/tvDiscover"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="30dp"
+            android:fontFamily="@font/arimo_bold"
+            android:text="@string/txt_discover"
+            android:textColor="@color/white"
+            android:textSize="30sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toTopOf="@id/tvDiscoverDescription"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_chainStyle="packed" />
+
+        <!-- TextView: Discover new location today -->
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/tvDiscoverDescription"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/arimo"
+            android:text="@string/txt_discover_new_location_today"
+            android:textColor="@color/gray"
+            android:textSize="16sp"
+            app:layout_constraintStart_toStartOf="@id/tvDiscover"
+            app:layout_constraintTop_toBottomOf="@id/tvDiscover" />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/icDot"
+            android:layout_width="10dp"
+            android:layout_height="10dp"
+            android:src="@drawable/ic_red_dot"
+            app:layout_constraintEnd_toEndOf="@+id/icDrawer"
+            app:layout_constraintTop_toTopOf="@+id/icDrawer" />
+
+
+        <!-- Icon -->
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/icDrawer"
+            android:layout_width="28dp"
+            android:layout_height="28dp"
+            android:layout_marginEnd="24dp"
+            android:rotationX="180"
+            android:rotationY="180"
+            android:src="@drawable/ic_menu_icon"
+            app:layout_constraintBottom_toBottomOf="@+id/tvDiscover"
+            app:layout_constraintEnd_toStartOf="@+id/icProfile"
+            app:layout_constraintTop_toTopOf="@+id/tvDiscover" />
+
+        <!-- Circular ImageView -->
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/icProfile"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginEnd="20dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/ic_dummy_profile"
+            app:layout_constraintBottom_toBottomOf="@id/tvDiscover"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/tvDiscover" />
+
+
+        <androidx.core.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginTop="15dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvDiscoverDescription">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+
+                <androidx.viewpager2.widget.ViewPager2
+                    android:id="@+id/viewPager"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:clipToPadding="false"
+                    android:paddingHorizontal="20dp"
+                    tools:background="@color/white" />
+
+                <TextView
+                    android:id="@+id/textViewFeeling"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="20dp"
+                    android:layout_marginTop="15dp"
+                    android:fontFamily="@font/arimo_bold"
+                    android:text="@string/txt_feeling_adventurous"
+                    android:textColor="@color/white"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
+
+                <!-- TextView: Discover new location today -->
+                <TextView
+                    android:id="@+id/textViewFeelingDescription"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="20dp"
+                    android:layout_marginTop="4dp"
+                    android:fontFamily="@font/arimo"
+                    android:text="@string/txt_get_inspiration_from_these_trending_categories"
+                    android:textColor="@color/gray"
+                    android:textSize="16sp" />
+
+                <GridView
+                    android:id="@+id/gridView"
+                    android:layout_width="match_parent"
+                    android:layout_height="600dp"
+                    android:layout_marginHorizontal="15dp"
+                    android:layout_marginTop="12dp"
+                    android:numColumns="2"
+                    app:layout_constraintTop_toBottomOf="@+id/constraintLayoutTwo" />
+            </LinearLayout>
+
+
+        </androidx.core.widget.NestedScrollView>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
