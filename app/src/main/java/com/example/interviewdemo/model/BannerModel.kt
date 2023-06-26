@@ -1,4 +1,4 @@
-package com.example.interviewdemo.model
+package com.example.bottomSheetDemo.model
 
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize

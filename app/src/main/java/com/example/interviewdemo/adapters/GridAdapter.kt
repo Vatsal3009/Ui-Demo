@@ -1,18 +1,14 @@
-package com.example.interviewdemo.adapters
+package com.example.bottomSheetDemo.adapters
 
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseAdapter
 import android.widget.ImageView
-import android.widget.ListAdapter
 import android.widget.TextView
 import androidx.cardview.widget.CardView
-import androidx.recyclerview.widget.RecyclerView
+import com.example.bottomSheetDemo.model.BannerModel
 import com.example.interviewdemo.R
-import com.example.interviewdemo.databinding.ItemBannerBinding
-import com.example.interviewdemo.databinding.ItemGridBinding
-import com.example.interviewdemo.model.BannerModel
 
 class GridAdapter(
     private val items: ArrayList<BannerModel>,

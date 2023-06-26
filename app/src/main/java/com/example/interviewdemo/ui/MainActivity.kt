@@ -1,28 +1,21 @@
-package com.example.interviewdemo.ui
+package com.example.bottomSheetDemo.ui
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.provider.ContactsContract.Data
-import android.view.View
-import android.widget.LinearLayout
-import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
-import com.example.interviewdemo.R
-import com.example.interviewdemo.adapters.BannerAdapter
-import com.example.interviewdemo.adapters.GridAdapter
+import com.example.bottomSheetDemo.adapters.BannerAdapter
+import com.example.bottomSheetDemo.adapters.GridAdapter
+
+import com.example.bottomSheetDemo.model.BannerModel
+import com.example.bottomSheetDemo.repository.DataRepository
+import com.example.bottomSheetDemo.utils.KEY_BANNER_DATA
 import com.example.interviewdemo.databinding.ActivityMainBinding
-import com.example.interviewdemo.model.BannerModel
-import com.example.interviewdemo.repository.DataRepository
-import com.example.interviewdemo.utils.KEY_BANNER_DATA
 import com.google.android.material.bottomsheet.BottomSheetBehavior
-import kotlinx.coroutines.delay
-import java.util.Timer
-import java.util.TimerTask
 
 class MainActivity : AppCompatActivity() {
     lateinit var binding: ActivityMainBinding
@@ -127,4 +120,3 @@ class MainActivity : AppCompatActivity() {
         e.printStackTrace()
     }
 }
-

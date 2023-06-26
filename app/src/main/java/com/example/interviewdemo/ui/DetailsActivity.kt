@@ -1,22 +1,21 @@
-package com.example.interviewdemo.ui
+package com.example.bottomSheetDemo.ui
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.util.TypedValue
 import android.view.View
 import android.widget.LinearLayout
-import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
-import com.example.interviewdemo.adapters.BannerAdapter
-import com.example.interviewdemo.adapters.SelectAgeAdapter
+import com.example.bottomSheetDemo.adapters.SelectAgeAdapter
+
+import com.example.bottomSheetDemo.model.BannerModel
+import com.example.bottomSheetDemo.repository.DataRepository
+import com.example.bottomSheetDemo.utils.KEY_BANNER_DATA
 import com.example.interviewdemo.databinding.ActivityDetailsBinding
-import com.example.interviewdemo.model.BannerModel
-import com.example.interviewdemo.repository.DataRepository
-import com.example.interviewdemo.utils.KEY_BANNER_DATA
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 
 class DetailsActivity : AppCompatActivity() {
@@ -28,9 +27,9 @@ class DetailsActivity : AppCompatActivity() {
     private var selectAgeAdapter: SelectAgeAdapter? = null
 
 
-    private lateinit var sheetOneBehavior: BottomSheetBehavior<ConstraintLayout>
+    private lateinit var sheetOneBehavior: BottomSheetBehavior<LinearLayout>
     private lateinit var sheetTwoBehavior: BottomSheetBehavior<LinearLayout>
-    private lateinit var sheetThreeBehavior: BottomSheetBehavior<ConstraintLayout>
+    private lateinit var sheetThreeBehavior: BottomSheetBehavior<LinearLayout>
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -39,59 +38,63 @@ class DetailsActivity : AppCompatActivity() {
         setContentView(binding.root)
         val bannerData = intent.extras?.get(KEY_BANNER_DATA) as BannerModel
         setData(bannerData)
+
+        //Sheet 1
         sheetOneBehavior = BottomSheetBehavior.from(binding.dialogBottom.bottomSheet)
+        sheetOneBehavior.isHideable = false
+        sheetOneBehavior.peekHeight = TypedValue.applyDimension(
+            TypedValue.COMPLEX_UNIT_DIP,
+            0f,
+            resources.displayMetrics
+        ).toInt()
+        //Sheet 2 +40
         sheetTwoBehavior = BottomSheetBehavior.from(binding.dialogBottom2.bottomSheet)
-        sheetThreeBehavior = BottomSheetBehavior.from(binding.dialogBottom3.bottomSheet)
-        sheetTwoBehavior.setPeekHeight(dpToPx(296f), true)
-        sheetThreeBehavior.setPeekHeight(dpToPx(396f), true)
-        sheetOneBehavior.isDraggable = false
-
-        sheetTwoBehavior.isDraggable = false
         sheetTwoBehavior.isHideable = false
-
-        sheetThreeBehavior.isDraggable = false
+        sheetTwoBehavior.peekHeight = TypedValue.applyDimension(
+            TypedValue.COMPLEX_UNIT_DIP,
+            290f,
+            resources.displayMetrics
+        ).toInt()
+        //Sheet 3+40
+        sheetThreeBehavior = BottomSheetBehavior.from(binding.dialogBottom3.bottomSheet)
         sheetThreeBehavior.isHideable = false
+        sheetThreeBehavior.peekHeight = TypedValue.applyDimension(
+            TypedValue.COMPLEX_UNIT_DIP,
+            390f,
+            resources.displayMetrics
+        ).toInt()
+        
+
 
         //first click
         binding.btnScheduleTrip.setOnClickListener {
-            expandCollapseSelectDateSheet()
+            expandCollapseSheet1(sheetOneBehavior, sheetTwoBehavior, sheetThreeBehavior)
+            manageSheetOne(sheetOneBehavior)
         }
 
         //after first click
         binding.dialogBottom.locationLayout.root.setOnClickListener {
-            binding.dialogBottom3.root.visibility = View.GONE
-            sheetTwoBehavior.setPeekHeight(dpToPx(100f), true)
-
-            if (sheetTwoBehavior.state == BottomSheetBehavior.STATE_EXPANDED) {
-                sheetTwoBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
-                binding.dialogBottom2.layoutSeats.root.visibility = View.VISIBLE
-                binding.dialogBottom2.layoutAdults.visibility = View.GONE
-
-            }
-            if (sheetThreeBehavior.state == BottomSheetBehavior.STATE_EXPANDED) {
-                sheetThreeBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
-            }
+            expandCollapseSheet1(sheetOneBehavior, sheetTwoBehavior, sheetThreeBehavior)
+            manageSheetOne(sheetOneBehavior)
 
         }
 
         binding.dialogBottom2.layoutAdults.setOnClickListener {
-            binding.dialogBottom3.root.visibility = View.VISIBLE
-            binding.dialogBottom3.layoutPayNow.root.visibility = View.VISIBLE
-
-            if (sheetThreeBehavior.state == BottomSheetBehavior.STATE_EXPANDED) {
-                sheetThreeBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
-            }
+            expandCollapseSheet2(sheetTwoBehavior,sheetThreeBehavior)
+            manageSheetTwo(sheetTwoBehavior)
 
         }
 
 //selectSeat click
         binding.dialogBottom2.layoutSeats.root.setOnClickListener {
-            expandSelectSeatsDataSheet()
+            expandCollapseSheet2(sheetTwoBehavior,sheetThreeBehavior)
+            manageSheetTwo(sheetTwoBehavior)
         }
 
         //payNowClick
         binding.dialogBottom3.layoutPayNow.root.setOnClickListener {
-            expandPayNowSheet()
+            expandCollapseSheet3(sheetThreeBehavior)
+            manageSheetThree(sheetThreeBehavior)
         }
 
         binding.dialogBottom3.btnDone.setOnClickListener {
@@ -100,7 +103,183 @@ class DetailsActivity : AppCompatActivity() {
         }
 
 
+        defaultVisibility()
     }
+
+    private fun defaultVisibility() {
+        binding.dialogBottom2.root.visibility = View.GONE
+        binding.dialogBottom3.root.visibility = View.GONE
+        sheetOneBehavior.isDraggable=false
+        sheetTwoBehavior.isDraggable=false
+        sheetThreeBehavior.isDraggable=false
+    }
+
+    private fun manageSheetOne(sheet: BottomSheetBehavior<LinearLayout>) {
+        sheet.addBottomSheetCallback(object : BottomSheetBehavior.BottomSheetCallback() {
+            override fun onStateChanged(bottomSheet: View, state: Int) {
+                print(state)
+                when (state) {
+                    BottomSheetBehavior.STATE_EXPANDED -> {
+                        binding.dialogBottom2.root.visibility = View.VISIBLE
+                    }
+
+                    BottomSheetBehavior.STATE_COLLAPSED -> {
+                        defaultVisibility()
+                    }
+
+                }
+            }
+
+            override fun onSlide(bottomSheet: View, slideOffset: Float) {
+
+            }
+        })
+    }
+
+    private fun manageSheetTwo(sheet: BottomSheetBehavior<LinearLayout>) {
+        sheet.addBottomSheetCallback(object : BottomSheetBehavior.BottomSheetCallback() {
+            override fun onStateChanged(bottomSheet: View, state: Int) {
+                print(state)
+                when (state) {
+                    BottomSheetBehavior.STATE_EXPANDED -> {
+                        binding.dialogBottom3.root.visibility = View.VISIBLE
+                    }
+
+                    BottomSheetBehavior.STATE_COLLAPSED -> {
+                        binding.dialogBottom3.root.visibility = View.GONE
+                    }
+
+                }
+            }
+
+            override fun onSlide(bottomSheet: View, slideOffset: Float) {
+
+            }
+        })
+    }
+
+    private fun manageSheetThree(sheet: BottomSheetBehavior<LinearLayout>) {
+        sheet.addBottomSheetCallback(object : BottomSheetBehavior.BottomSheetCallback() {
+            override fun onStateChanged(bottomSheet: View, state: Int) {
+                print(state)
+                when (state) {
+                    BottomSheetBehavior.STATE_EXPANDED -> {
+
+                    }
+
+                    BottomSheetBehavior.STATE_COLLAPSED -> {
+
+                    }
+
+                }
+            }
+
+            override fun onSlide(bottomSheet: View, slideOffset: Float) {
+
+            }
+        })
+    }
+
+    private fun expandCollapseSheet1(
+        selectedBottomSheet: BottomSheetBehavior<LinearLayout>,
+        commonSheet1: BottomSheetBehavior<LinearLayout>,
+        commonSheet2: BottomSheetBehavior<LinearLayout>
+    ) {
+
+        //when user click on first
+        if (selectedBottomSheet.state != BottomSheetBehavior.STATE_EXPANDED) {
+            selectedBottomSheet.state = BottomSheetBehavior.STATE_EXPANDED
+            //binding.persistentBtn.text = "Close Bottom Sheet"
+        } else {
+            if (commonSheet1.state == BottomSheetBehavior.STATE_EXPANDED || commonSheet2.state == BottomSheetBehavior.STATE_EXPANDED){
+                if(commonSheet1.state == BottomSheetBehavior.STATE_EXPANDED){
+                    commonSheet1.state = BottomSheetBehavior.STATE_COLLAPSED
+                }
+                if(commonSheet2.state == BottomSheetBehavior.STATE_EXPANDED){
+                    commonSheet2.state = BottomSheetBehavior.STATE_COLLAPSED
+                }
+            }
+            else{
+                selectedBottomSheet.state = BottomSheetBehavior.STATE_COLLAPSED
+            }
+            // binding.persistentBtn.text = "Show Bottom Sheet"
+        }
+        /*   if (commonSheet.state != BottomSheetBehavior.STATE_EXPANDED) {
+               commonSheet.state = BottomSheetBehavior.STATE_EXPANDED
+               //binding.persistentBtn.text = "Close Bottom Sheet"
+           } else {
+               commonSheet.state = BottomSheetBehavior.STATE_COLLAPSED
+               // binding.persistentBtn.text = "Show Bottom Sheet"
+           }*/
+    }
+
+    private fun expandCollapseSheet2(
+        selectedBottomSheet: BottomSheetBehavior<LinearLayout>,
+        commonSheet1: BottomSheetBehavior<LinearLayout>
+    ) {
+        //when user click on first
+        if (selectedBottomSheet.state != BottomSheetBehavior.STATE_EXPANDED) {
+            selectedBottomSheet.state = BottomSheetBehavior.STATE_EXPANDED
+            binding.dialogBottom2.layoutSeats.root.visibility = View.GONE
+            //binding.persistentBtn.text = "Close Bottom Sheet"
+        } else {
+            if (commonSheet1.state == BottomSheetBehavior.STATE_EXPANDED ){
+                if(commonSheet1.state == BottomSheetBehavior.STATE_EXPANDED){
+                    commonSheet1.state = BottomSheetBehavior.STATE_COLLAPSED
+                    binding.dialogBottom3.layoutPayNow.root.visibility = View.VISIBLE
+                }else{
+                    binding.dialogBottom3.layoutPayNow.root.visibility = View.GONE
+                }
+            }
+            else{
+                selectedBottomSheet.state = BottomSheetBehavior.STATE_COLLAPSED
+                binding.dialogBottom2.layoutSeats.root.visibility = View.VISIBLE
+            }
+            // binding.persistentBtn.text = "Show Bottom Sheet"
+        }
+    }
+
+    private fun expandCollapseSheet3(
+        commonSheet: BottomSheetBehavior<LinearLayout>,
+    ) {
+        //when user click on first
+        if (commonSheet.state != BottomSheetBehavior.STATE_EXPANDED) {
+            commonSheet.state = BottomSheetBehavior.STATE_EXPANDED
+            binding.dialogBottom3.layoutPayNow.root.visibility = View.GONE
+            //binding.persistentBtn.text = "Close Bottom Sheet"
+        } else {
+            commonSheet.state = BottomSheetBehavior.STATE_COLLAPSED
+            binding.dialogBottom3.layoutPayNow.root.visibility = View.VISIBLE
+            // binding.persistentBtn.text = "Show Bottom Sheet"
+        }
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     private val pageCallback = object : ViewPager2.OnPageChangeCallback() {
         override fun onPageSelected(position: Int) {
