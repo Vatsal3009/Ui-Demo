@@ -1,7 +1,8 @@
-package com.example.interviewdemo.repository
+package com.example.bottomSheetDemo.repository
 
+
+import com.example.bottomSheetDemo.model.BannerModel
 import com.example.interviewdemo.R
-import com.example.interviewdemo.model.BannerModel
 
 
 object DataRepository {
@@ -35,8 +36,8 @@ object DataRepository {
 
      val banners = ArrayList<BannerModel>().apply {
          add(
-             com.example.interviewdemo.model.BannerModel(
-                 com.example.interviewdemo.R.drawable.ic_location_a,
+             com.example.bottomSheetDemo.model.BannerModel(
+                R.drawable.ic_location_a,
                  "London",
                  "NEW OSOGBO"
              )
@@ -70,8 +71,8 @@ object DataRepository {
              )
          )
          add(
-             com.example.interviewdemo.model.BannerModel(
-                 com.example.interviewdemo.R.drawable.ic_location_a,
+             com.example.bottomSheetDemo.model.BannerModel(
+R.drawable.ic_location_a,
                  "London",
                  "NEW OSOGBO"
              )

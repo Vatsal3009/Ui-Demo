@@ -1,14 +1,12 @@
-package com.example.interviewdemo.adapters
+package com.example.bottomSheetDemo.adapters
 
-import android.content.ClipData.Item
 import android.graphics.Color
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.example.interviewdemo.databinding.ItemBannerBinding
 import com.example.interviewdemo.databinding.ItemSelectAgeBinding
-import com.example.interviewdemo.model.BannerModel
+
 
 class SelectAgeAdapter(
     private val items: ArrayList<Int>,

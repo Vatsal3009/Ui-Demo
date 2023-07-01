@@ -1,10 +1,11 @@
-package com.example.interviewdemo.adapters
+package com.example.bottomSheetDemo.adapters
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+
+import com.example.bottomSheetDemo.model.BannerModel
 import com.example.interviewdemo.databinding.ItemBannerBinding
-import com.example.interviewdemo.model.BannerModel
 
 class BannerAdapter(
     private val items: ArrayList<BannerModel>,
